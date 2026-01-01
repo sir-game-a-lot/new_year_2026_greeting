@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Majestic New Year 2026</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // CRITICAL: Polyfill process.env for browser environments immediately
+        window.process = window.process || {};
+        window.process.env = window.process.env || {};
+        
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        display: ['Cinzel', 'serif'],
+                    },
+                    animation: {
+                        'spin-slow': 'spin 4s linear infinite',
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 3s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(234, 179, 8, 0.1)' },
+                            '50%': { boxShadow: '0 0 40px rgba(234, 179, 8, 0.3)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <!-- Import Map for Gemini SDK -->
+    <script type="importmap">
+    {
+        "imports": {
+            "@google/genai": "https://esm.sh/@google/genai@0.1.1"
+        }
+    }
+    </script>
+
+    <style>
+        body {
+            background-color: #020617;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            box-shadow: 0 0 50px -10px rgba(234, 179, 8, 0.15);
+        }
+        
+        .majestic-text {
+            background: linear-gradient(to bottom, #fefce8, #fde047, #b45309);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body class="text-white font-serif antialiased h-screen flex flex-col items-center justify-center relative selection:bg-yellow-500/30">
+
+    <!-- Canvas Background -->
+    <canvas id="bg-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
+
+    <!-- Main Content -->
+    <main class="relative z-10 w-full max-w-3xl p-6 flex flex-col items-center gap-10">
+        
+        <!-- Header Section -->
+        <header class="text-center space-y-4 opacity-0" id="header-section">
+            <div class="inline-flex items-center justify-center gap-3 opacity-60">
+                <span class="h-px w-12 bg-gradient-to-r from-transparent to-yellow-500"></span>
+                <span class="text-yellow-500 text-[10px] md:text-xs tracking-[0.4em] uppercase font-display">A New Era</span>
+                <span class="h-px w-12 bg-gradient-to-l from-transparent to-yellow-500"></span>
+            </div>
+
+            <div class="relative h-32 md:h-48 flex items-center justify-center overflow-hidden">
+                <!-- The Year Display -->
+                <h1 id="year-display" class="font-display text-7xl md:text-9xl font-black majestic-text drop-shadow-2xl tracking-tighter transition-all duration-1000 transform scale-100">
+                    2025
+                </h1>
+            </div>
+
+            <p id="subtitle" class="text-lg md:text-2xl italic text-slate-300/80 transition-opacity duration-1000">
+                Reflecting on the past...
+            </p>
+        </header>
+
+        <!-- Prophecy Card -->
+        <div class="w-full animate-float opacity-0" id="card-section">
+            <div class="glass-panel rounded-2xl p-8 md:p-12 text-center relative group overflow-hidden transition-all duration-500">
+                <!-- Decorative Glow -->
+                <div class="absolute -top-24 -left-24 w-48 h-48 bg-yellow-500/10 rounded-full blur-3xl group-hover:bg-yellow-500/20 transition-all duration-700"></div>
+                <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all duration-700"></div>
+
+                <div id="card-content" class="relative z-10 flex flex-col items-center gap-6 min-h-[220px] justify-center">
+                    
+                    <!-- Icon -->
+                    <div id="icon-wrapper" class="text-yellow-400 opacity-80 transition-all duration-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="animate-spin-slow"><path d="M12 2v20"/><path d="M2 12h20"/><path d="m4.93 4.93 14.14 14.14"/><path d="m14.93 4.93-14.14 14.14"/></svg>
+                    </div>
+
+                    <!-- Text -->
+                    <div id="message-container" class="space-y-4">
+                        <h2 class="text-2xl text-yellow-100 font-display font-light">Unveil Your Destiny</h2>
+                        <p class="text-slate-400 text-sm md:text-base max-w-md mx-auto leading-relaxed">
+                            The cosmos has written a verse for your journey into 2026.<br>Are you ready to receive it?
+                        </p>
+                    </div>
+
+                    <!-- Button -->
+                    <button id="generate-btn" class="mt-4 group relative px-10 py-4 bg-transparent overflow-hidden rounded-full transition-all hover:bg-yellow-500/10 active:scale-95 cursor-pointer border border-yellow-500/30 hover:border-yellow-500/60 shadow-[0_0_20px_rgba(234,179,8,0.1)] hover:shadow-[0_0_30px_rgba(234,179,8,0.2)]">
+                        <div class="absolute inset-0 w-0 bg-yellow-500/10 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
+                        <span class="relative text-yellow-100 font-display tracking-widest text-xs md:text-sm uppercase flex items-center gap-3">
+                            <span id="btn-text">Reveal Prophecy</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-4 text-center opacity-0" id="footer-section">
+            <p class="font-display text-lg text-yellow-500/60 font-bold tracking-widest uppercase text-[10px]">Best Regards - Sushil & Agness</p>
+        </footer>
+
+    </main>
+
+    <!-- SCRIPT 1: CORE VISUALS (GUARANTEED TO RUN) -->
+    <script>
+        // --- 1. DOM Elements ---
+        const ui = {
+            year: document.getElementById('year-display'),
+            subtitle: document.getElementById('subtitle'),
+            btn: document.getElementById('generate-btn'),
+            btnText: document.getElementById('btn-text'),
+            content: document.getElementById('message-container'),
+            icon: document.getElementById('icon-wrapper'),
+            header: document.getElementById('header-section'),
+            card: document.getElementById('card-section'),
+            footer: document.getElementById('footer-section'),
+        };
+
+        // --- 2. Initial Animation (The Fix for "Still 2025") ---
+        // We use requestAnimationFrame to ensure the browser is ready to render
+        requestAnimationFrame(() => {
+            // Reveal sections
+            ui.header.classList.add('animate-fade-in');
+            setTimeout(() => ui.card.classList.add('animate-fade-in'), 300);
+            setTimeout(() => ui.footer.classList.add('animate-fade-in'), 600);
+
+            // Trigger Year Change Sequence
+            setTimeout(() => {
+                // Fade out 2025
+                ui.year.style.opacity = '0';
+                ui.year.style.transform = 'translateY(-20px) scale(0.9)';
+                ui.subtitle.style.opacity = '0';
+
+                setTimeout(() => {
+                    // Update to 2026
+                    ui.year.textContent = '2026';
+                    ui.subtitle.textContent = '"The golden horizon awaits."';
+                    ui.subtitle.className = "text-lg md:text-2xl italic text-yellow-200/90 drop-shadow-md transition-opacity duration-1000";
+                    
+                    // Fade in 2026
+                    ui.year.style.opacity = '1';
+                    ui.year.style.transform = 'translateY(0) scale(1)';
+                    ui.subtitle.style.opacity = '1';
+                    
+                    // Burst effect
+                    spawnExplosion(window.innerWidth / 2, window.innerHeight / 3);
+                }, 800);
+            }, 1200);
+        });
+
+        // --- 3. Interaction Logic (Offline Fallback) ---
+        // This function is exposed so the AI script can overwrite it if it loads successfully.
+        window.generateProphecyAction = async () => {
+            console.log("Using Offline Fallback");
+            await new Promise(r => setTimeout(r, 1500)); // Simulate thinking
+            return getFallbackProphecy();
+        };
+
+        ui.btn.addEventListener('click', async () => {
+            setLoading(true);
+            try {
+                // Calls either the fallback (defined below) or the AI version (defined in next script)
+                const data = await window.generateProphecyAction();
+                renderResult(data);
+            } catch (e) {
+                console.error(e);
+                renderResult(getFallbackProphecy());
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        function setLoading(isLoading) {
+            if (isLoading) {
+                ui.btn.disabled = true;
+                ui.btn.classList.add('opacity-50', 'cursor-not-allowed');
+                ui.btnText.textContent = "Consulting the Stars...";
+                ui.content.style.opacity = '0.5';
+                ui.icon.innerHTML = `<div class="w-10 h-10 border-2 border-yellow-500/30 border-t-yellow-400 rounded-full animate-spin"></div>`;
+            } else {
+                ui.btn.disabled = false;
+                ui.btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                ui.btnText.textContent = "Reveal Another Fate";
+                ui.content.style.opacity = '1';
+            }
+        }
+
+        function renderResult(data) {
+             ui.icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-300 drop-shadow-[0_0_10px_rgba(253,224,71,0.5)]"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M9 3v4"/><path d="M15 3v4"/><path d="M19 3v4"/></svg>`;
+            
+            ui.content.innerHTML = `
+                <div class="animate-fade-in space-y-6">
+                    <span class="inline-block py-1 px-4 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 text-[10px] tracking-[0.3em] uppercase">
+                        ${data.theme}
+                    </span>
+                    <p class="text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-br from-white via-yellow-100 to-amber-200 font-serif leading-relaxed italic drop-shadow-sm">
+                        "${data.message}"
+                    </p>
+                    <div class="w-12 h-1 bg-gradient-to-r from-transparent via-yellow-500/50 to-transparent mx-auto"></div>
+                </div>
+            `;
+            spawnExplosion(window.innerWidth / 2, window.innerHeight / 2);
+        }
+
+        function getFallbackProphecy() {
+            const fallbacks = [
+                { theme: "Brilliance", message: "The stars align to illuminate a path only you can walk. Your light will guide others." },
+                { theme: "Courage", message: "A golden horizon rises to meet your ambition. Step forward, for the world awaits your touch." },
+                { theme: "Serenity", message: "In the quiet moments of the coming year, you will find the strength that moves mountains." },
+                { theme: "Fortune", message: "The winds of chance blow in your favor. Prepare your sails for a journey of abundance." },
+                { theme: "Destiny", message: "What you seek is seeking you. Open your heart to the wonders that 2026 holds." }
+            ];
+            return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+        }
+
+        // --- 4. Particle System (Visuals) ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let width, height;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor(x, y, burst = false) {
+                this.x = x || Math.random() * width;
+                this.y = y || Math.random() * height;
+                this.size = Math.random() * 2 + 0.5;
+                const speed = burst ? Math.random() * 3 + 1 : Math.random() * 0.4 + 0.1;
+                const angle = Math.random() * Math.PI * 2;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.life = 1.0;
+                this.decay = burst ? Math.random() * 0.02 + 0.01 : 0.003;
+                const colors = ['#fef3c7', '#fde047', '#fbbf24', '#ffffff'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= this.decay;
+                if (!this.burst) {
+                    if (this.y < -10) this.y = height + 10;
+                    if (this.y > height + 10) this.y = -10;
+                    if (this.x < -10) this.x = width + 10;
+                    if (this.x > width + 10) this.x = -10;
+                }
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = Math.max(0, this.life);
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        function spawnExplosion(x, y) {
+            for (let i = 0; i < 40; i++) {
+                const p = new Particle(x, y, true);
+                p.burst = true;
+                particles.push(p);
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            if (particles.filter(p => !p.burst).length < 50) particles.push(new Particle());
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.update();
+                p.draw();
+                if (p.life <= 0) particles.splice(i, 1);
+            }
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('click', (e) => spawnExplosion(e.clientX, e.clientY));
+        resize();
+        animate();
+    </script>
+
+    <!-- SCRIPT 2: AI ENHANCEMENT (PROGRESSIVE LOADING) -->
+    <script type="module">
+        import { GoogleGenAI, Type } from "@google/genai";
+
+        // Setup AI if key exists
+        const getApiKey = () => {
+            try { return (window.process && window.process.env && window.process.env.API_KEY) || ''; } catch { return ''; }
+        };
+
+        const API_KEY = getApiKey();
+        
+        if (API_KEY) {
+            console.log("AI Key Detected. Upgrading interactions...");
+            const ai = new GoogleGenAI({ apiKey: API_KEY });
+            
+            // Overwrite the global action with the AI version
+            window.generateProphecyAction = async () => {
+                const response = await ai.models.generateContent({
+                    model: "gemini-3-flash-preview",
+                    contents: "Generate a majestic, poetic, and inspiring short prophecy for 2026. Keep it abstract but personal. Theme words: Gold, Starlight, Courage. Under 30 words.",
+                    config: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: Type.OBJECT,
+                            properties: {
+                                message: { type: Type.STRING },
+                                theme: { type: Type.STRING },
+                            },
+                            required: ["message", "theme"],
+                        },
+                    },
+                });
+                return JSON.parse(response.text);
+            };
+        } else {
+            console.warn("No API Key found. Running in Offline Mode.");
+        }
+    </script>
+</body>
+</html>
